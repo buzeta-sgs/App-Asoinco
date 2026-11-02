@@ -1,0 +1,117 @@
+<div style="background:#eef3f7; padding:24px 12px; font-family:Arial,Helvetica,sans-serif;">
+  <div style="max-width:560px; margin:0 auto; background:#ffffff; border-radius:14px; overflow:hidden; border:1px solid #dfe7ec;">
+
+    <!-- Logo -->
+    <div style="background:#ffffff; padding:22px 28px 10px; text-align:center;">
+      <img src="https://frwvtqugssmfnslennub.supabase.co/storage/v1/object/public/cuotas/assets/asoinco-logo.png" alt="ASOINCO" width="240" style="width:240px; max-width:80%; height:auto; display:inline-block;">
+    </div>
+
+    <!-- Franja de colores del logo -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+      <tr>
+        <td height="5" style="background:#8dc63f; font-size:0; line-height:0;">&nbsp;</td>
+        <td height="5" style="background:#fdc844; font-size:0; line-height:0;">&nbsp;</td>
+        <td height="5" style="background:#2f7fc9; font-size:0; line-height:0;">&nbsp;</td>
+      </tr>
+    </table>
+
+    <!-- Título -->
+    <div style="background:#2f7fc9; background-image:linear-gradient(135deg,#2f7fc9,#1f5f9e); padding:18px 28px; text-align:center;">
+      <div style="font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:#dcecfa;">Estado de cuenta</div>
+      <div style="font-size:20px; font-weight:bold; color:#ffffff; margin-top:4px; text-transform:capitalize;">{{mes}}</div>
+    </div>
+
+    <!-- Mensaje -->
+    <div style="padding:28px 30px 8px; color:#2b3a47; font-size:14px; line-height:1.7;">
+      <p style="margin:0 0 16px; font-size:16px;">Estimado/a <strong style="color:#16324f;">{{company_name}}</strong>,</p>
+      <p style="margin:0 0 16px;">Esperamos que se encuentre bien. Adjuntamos su estado de cuenta actualizado correspondiente a <strong>{{mes}}</strong>.</p>
+    </div>
+
+    <!-- Resumen -->
+    <div style="padding:0 30px;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background:#f2f7fc; border:1px solid #d6e5f4; border-radius:12px;">
+        <tr>
+          <td style="padding:16px 20px;">
+            <div style="font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#6b8299;">Deuda actual</div>
+            <div style="font-size:28px; font-weight:bold; color:#2f7fc9; margin-top:2px;">{{deuda}}</div>
+          </td>
+          <td style="padding:16px 20px; text-align:right; border-left:1px solid #d6e5f4;">
+            <div style="font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#6b8299;">Cuota del mes</div>
+            <div style="font-size:18px; font-weight:bold; color:#16324f; margin-top:2px;">{{cuota}}</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Botón PDF -->
+    <div style="padding:22px 30px 6px; text-align:center;">
+      <a href="{{pdf_url}}" style="display:inline-block; background:#2f7fc9; color:#ffffff; text-decoration:none; font-weight:bold; font-size:15px; padding:14px 34px; border-radius:10px;">📄 Descargar estado de cuenta (PDF)</a>
+    </div>
+
+    <div style="padding:16px 30px 4px; color:#2b3a47; font-size:14px; line-height:1.7;">
+      <p style="margin:0 0 16px;">Le recordamos que, en caso de tener saldos pendientes, le agradeceríamos regularizar su pago a la brevedad. Si ya ha realizado el pago recientemente, por favor ignore este mensaje.</p>
+    </div>
+
+    <!-- Datos de transferencia -->
+    <div style="padding:0 30px 14px;">
+      <div style="background:#eef5fc; border-left:4px solid #2f7fc9; border-radius:8px; padding:14px 18px; font-size:13.5px; line-height:1.8; color:#2b3a47;">
+        <div style="font-size:11px; letter-spacing:1px; text-transform:uppercase; font-weight:bold; color:#16324f; margin-bottom:4px;">Datos para transferir</div>
+        <strong>Banco Scotiabank</strong> · Cuenta Corriente<br>
+        N° de cuenta: <strong>983742467</strong><br>
+        Asociación Gremial de Industrias de Coquimbo ASOINCO A.G.<br>
+        RUT 65.674.660-2<br>
+        Enviar comprobante a: <a href="mailto:finanzas.asoinco@gmail.com" style="color:#2f7fc9;">finanzas.asoinco@gmail.com</a>
+      </div>
+    </div>
+
+    <!-- Contacto -->
+    <div style="padding:0 30px 8px;">
+      <div style="background:#f7f9fb; border-left:4px solid #8dc63f; border-radius:8px; padding:14px 18px; font-size:13.5px; line-height:1.9; color:#2b3a47;">
+        <div style="font-weight:bold; color:#16324f; margin-bottom:2px;">¿Tiene alguna duda o necesita más información?</div>
+        📧 <a href="mailto:finanzas.asoinco@gmail.com" style="color:#2f7fc9; text-decoration:none;">finanzas.asoinco@gmail.com</a><br>
+        📧 <a href="mailto:asistente@asoinco.cl" style="color:#2f7fc9; text-decoration:none;">asistente@asoinco.cl</a><br>
+        📞 <a href="tel:+56979798887" style="color:#2f7fc9; text-decoration:none;">+56 9 7979 8887</a>
+      </div>
+    </div>
+
+    <!-- Despedida -->
+    <div style="padding:16px 30px 6px; color:#2b3a47; font-size:14px; line-height:1.7;">
+      <p style="margin:0 0 6px;">Agradecemos su compromiso y apoyo a Asoinco.</p>
+      <p style="margin:0;">Atentamente,</p>
+    </div>
+
+    <!-- Firma -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+      <tr>
+        <td style="padding:8px 0 0 30px; vertical-align:middle;">
+          <div style="font-size:26px; font-weight:bold; color:#0b4a86; line-height:1.2;">Camila Cortés</div>
+          <div style="font-size:16px; color:#0b4a86; margin:2px 0 12px;">Asistente Administrativa</div>
+          <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+          <tr>
+            <td width="30" style="padding:4px 0;"><img src="https://frwvtqugssmfnslennub.supabase.co/storage/v1/object/public/cuotas/assets/asoinco-ic_phone.png" width="22" height="22" alt="" style="display:block;"></td>
+            <td style="padding:4px 0; font-size:13px; font-weight:bold; color:#0b4a86;">+569 79798887</td>
+          </tr>
+          <tr>
+            <td width="30" style="padding:4px 0;"><img src="https://frwvtqugssmfnslennub.supabase.co/storage/v1/object/public/cuotas/assets/asoinco-ic_web.png" width="22" height="22" alt="" style="display:block;"></td>
+            <td style="padding:4px 0; font-size:13px; font-weight:bold; color:#0b4a86;">www.asoinco.cl</td>
+          </tr>
+          <tr>
+            <td width="30" style="padding:4px 0;"><img src="https://frwvtqugssmfnslennub.supabase.co/storage/v1/object/public/cuotas/assets/asoinco-ic_mail.png" width="22" height="22" alt="" style="display:block;"></td>
+            <td style="padding:4px 0; font-size:13px; font-weight:bold; color:#0b4a86;">asistente@asoinco.cl</td>
+          </tr>
+          </table>
+        </td>
+        <td width="230" style="padding:8px 24px 0 0; text-align:right; vertical-align:middle;">
+          <img src="https://frwvtqugssmfnslennub.supabase.co/storage/v1/object/public/cuotas/assets/asoinco-logo.png" alt="ASOINCO" width="210" style="width:210px; height:auto; display:inline-block;">
+        </td>
+      </tr>
+    </table>
+    <img src="https://frwvtqugssmfnslennub.supabase.co/storage/v1/object/public/cuotas/assets/asoinco-wave.png" alt="" width="560" style="width:100%; height:auto; display:block; margin-top:-6px;">
+
+    <!-- Pie -->
+    <div style="background:#f2f5f8; border-top:1px solid #e3eaef; padding:14px 30px; text-align:center; font-size:11.5px; color:#8794a1; line-height:1.6;">
+      Asociación Gremial de Industriales de Coquimbo<br>
+      Este es un mensaje automatizado, por favor no responda directamente a este correo.
+    </div>
+  </div>
+</div>

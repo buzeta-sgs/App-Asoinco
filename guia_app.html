@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Guía de la app ASOINCO</title>
+<style>
+@page{size:A4;margin:13mm}
+*{box-sizing:border-box}
+body{font-family:"Segoe UI",Arial,sans-serif;color:#14304D;margin:0;font-size:11.5pt;line-height:1.45}
+.portada{background:linear-gradient(120deg,#14304D,#1C4A78 55%,#2F7FC9);color:#F5F8FB;border-radius:14px;padding:30px 34px;margin-bottom:16px;position:relative;overflow:hidden}
+.portada:after{content:'';position:absolute;left:0;right:0;bottom:0;height:8px;background:linear-gradient(90deg,#8DC63F 0 33%,#FDC844 33% 66%,#2F7FC9 66%)}
+.eyebrow{font-size:9pt;letter-spacing:3px;text-transform:uppercase;color:#FDC844;font-weight:700}
+h1{font-size:26pt;margin:6px 0 8px;line-height:1.1}
+.portada p{margin:0;color:#D6E4F2}
+.modulo{display:flex;align-items:center;gap:12px;margin:20px 0 10px;padding:10px 16px;border-radius:10px;color:#fff;font-size:15pt;font-weight:800;page-break-after:avoid}
+.m1{background:#1C4A78}.m2{background:#B8701A}
+.panel{border:1px solid #DDE5EE;border-radius:12px;padding:12px 16px;margin-bottom:10px;page-break-inside:avoid}
+h2{font-size:13pt;margin:0 0 4px}
+.para{color:#4A5D72;margin:0 0 6px}
+ul{margin:2px 0 0;padding-left:20px}
+li{margin:2px 0}
+.tip{background:#FFF7E0;border-left:4px solid #FDC844;border-radius:6px;padding:6px 10px;margin-top:8px;font-size:10.5pt}
+.donde{display:inline-block;background:#EEF3F8;border-radius:6px;padding:1px 8px;font-size:9.5pt;font-weight:700;color:#1C4A78;margin-left:6px;vertical-align:2px}
+.intro{border:1px solid #DDE5EE;border-radius:12px;padding:12px 16px;margin-bottom:10px}
+</style></head><body>
+
+<div class="portada">
+  <div class="eyebrow">Guía para estudiar · todas las pantallas</div>
+  <h1>App ASOINCO<br>Gestión de socios y Expo 2027</h1>
+  <p>Para qué sirve cada panel y qué se puede hacer en él</p>
+</div>
+
+<div class="intro">
+  <h2>Cómo se entra</h2>
+  <ul>
+    <li>Dirección: <b>asoinco-gestion.netlify.app</b>. Se entra con <b>usuario</b> (sin correo, por ejemplo “presidente”) o con correo, más la contraseña.</li>
+    <li>Al entrar aparecen dos tarjetas: <b>Socios ASOINCO</b> (socios, cuotas, cobros y comunicaciones) y <b>Expo ASOINCO</b> (stands, reservas y cobros de la feria). Cada una tiene su propio menú a la izquierda.</li>
+    <li>Hay tres roles: <b>Presidente</b> y <b>Gerente General</b> (pueden todo, incluso crear usuarios y borrar pagos) y <b>Administrativa</b>.</li>
+  </ul>
+</div>
+
+<div class="modulo m1">👥 Módulo Socios ASOINCO</div>
+
+<div class="panel">
+  <h2>Socios<span class="donde">menú: Socios</span></h2>
+  <p class="para">La lista de todas las empresas socias.</p>
+  <ul>
+    <li>Cada socio muestra su <b>folio</b>, RUT, tamaño (Micro, Pequeña, Mediana, Grande) y una etiqueta roja si tiene <b>días de atraso</b>.</li>
+    <li>Arriba se agrega un socio nuevo; el folio se asigna solo.</li>
+    <li>Al hacer clic en un socio se abre su <b>ficha</b>: datos, cuotas, abonos, estado de cuenta en PDF, carta y contrato, y los documentos firmados.</li>
+  </ul>
+</div>
+
+<div class="panel">
+  <h2>Cuotas<span class="donde">menú: Cuotas</span></h2>
+  <p class="para">Las cuotas mensuales de cada socio.</p>
+  <ul>
+    <li>Las cuotas se crean <b>solas el día 1 de cada mes</b> y vencen ese mismo día.</li>
+    <li>Se puede marcar una cuota como pagada, registrar <b>abonos</b> (pagos parciales), editar el monto y subir documentos (comprobantes).</li>
+    <li>Se descarga el estado de cuenta o el desglose de una cuota en PDF.</li>
+  </ul>
+</div>
+
+<div class="panel">
+  <h2>Saldo<span class="donde">menú: Saldo</span></h2>
+  <p class="para">El saldo del mes en un vistazo.</p>
+  <ul>
+    <li>Arriba: el mes, el <b>% cobrado</b> y una barra de avance.</li>
+    <li>Tres tarjetas: <b>Cobrado este mes</b>, <b>Pendiente (aún no vence)</b> y <b>Atrasado</b> (todos los meses).</li>
+    <li>Abajo, <b>Por socio</b>: lo cobrado, lo pendiente y lo atrasado de cada empresa, con buscador.</li>
+  </ul>
+</div>
+
+<div class="panel">
+  <h2>Resumen<span class="donde">menú: Resumen</span></h2>
+  <p class="para">El panel de inicio de las cuotas, para mostrar.</p>
+  <ul>
+    <li><b>Total por cobrar</b>, con una barra verde (al día) y roja (atrasado).</li>
+    <li>Socios activos, socios al día, socios con atraso y suspendidos.</li>
+    <li><b>Cuotas de este mes</b>: un círculo con el % cobrado.</li>
+    <li><b>¿Hace cuánto está atrasado?</b>: la deuda separada en 1–30, 31–60, 61–90 y más de 90 días.</li>
+    <li><b>Socios con más deuda atrasada</b>: los 8 que más deben; con un clic se abre su ficha.</li>
+  </ul>
+</div>
+
+<div class="panel">
+  <h2>Mensajes<span class="donde">menú: Mensajes</span></h2>
+  <p class="para">Los correos a los socios.</p>
+  <ul>
+    <li><b>Redactar mensaje</b>: un correo a un socio, con el formato de ASOINCO (logo y firma).</li>
+    <li><b>Cobro mensual masivo</b>: el cobro a todos los socios con saldo, que se envía el <b>día 2</b> de cada mes. También descarga todos los PDF en un ZIP.</li>
+    <li><b>Mensajes enviados</b>: el historial de lo que se mandó.</li>
+  </ul>
+  <div class="tip">La cobranza sale desde finanzas.asoinco@gmail.com; la carta y el contrato salen desde asistente@asoinco.cl.</div>
+</div>
+
+<div class="panel">
+  <h2>Calendario<span class="donde">menú: Calendario</span></h2>
+  <p class="para">Un calendario mensual con los vencimientos. Al hacer clic en un día se ven las cuotas de ese día. Se avanza de mes con las flechas ‹ ›.</p>
+</div>
+
+<div class="panel">
+  <h2>Prospectos<span class="donde">menú: Prospectos</span></h2>
+  <p class="para">Las empresas que todavía no son socias.</p>
+  <ul>
+    <li><b>+ Nuevo prospecto</b>: los datos de la empresa, el representante, la cuota y los 2 socios patrocinantes.</li>
+    <li><b>⬇ Carta PDF</b> y <b>✉️ Enviar carta de interés</b>.</li>
+    <li><b>👁 Ver contrato PDF</b>: para revisar el contrato antes de aceptar.</li>
+    <li><b>✓ Aceptó → pasar a socio</b>: lo crea como socio con su folio, y luego se envía el contrato.</li>
+    <li><b>✕ No interesado</b>: lo deja como rechazado (se puede reactivar).</li>
+  </ul>
+</div>
+
+<div class="panel">
+  <h2>Insumos<span class="donde">menú: Insumos</span></h2>
+  <p class="para">El inventario de lo que se usa en la oficina (papel, bolsas, artículos de aseo, etc.). Se anota cuánto queda, se puede pedir un aviso cuando se esté acabando y se descarga en Excel.</p>
+</div>
+
+<div class="panel">
+  <h2>Usuarios<span class="donde">menú: Usuarios</span></h2>
+  <p class="para">Quién puede entrar a la app.</p>
+  <ul>
+    <li><b>Crear usuario</b>: nombre, usuario o correo, contraseña y rol. Un usuario sin correo (por ejemplo “presidente”) entra solo con esa palabra.</li>
+    <li>Solo el presidente y el gerente general pueden crear usuarios y cambiar roles.</li>
+  </ul>
+</div>
+
+<div class="panel">
+  <h2>Papelera<span class="donde">menú: Papelera</span></h2>
+  <p class="para">Los socios y las cuotas eliminados. Nada se borra de verdad al tiro: desde aquí se pueden recuperar.</p>
+</div>
+
+<div class="modulo m2">🏟️ Módulo Expo ASOINCO 2027</div>
+
+<div class="panel">
+  <h2>Resumen de la Expo<span class="donde">menú Expo: Resumen</span></h2>
+  <ul>
+    <li><b>Avance de la recaudación</b>: cuánto se ha cobrado del total de los stands.</li>
+    <li><b>Ocupación por zona</b>: cuántos stands están reservados en cada zona.</li>
+    <li><b>Últimos pagos</b> y una explicación de <b>cómo funciona</b> la reserva.</li>
+  </ul>
+</div>
+
+<div class="panel">
+  <h2>Mapa de stands (feria 3D)<span class="donde">menú Expo: Mapa de stands</span></h2>
+  <p class="para">El corazón de la Expo: todos los stands y la feria en 3D.</p>
+  <ul>
+    <li>Arriba, botones por zona. A la izquierda, los stands por número: los libres con color suave y los ocupados con el color de su zona (⏳ con saldo, ✓ pagado).</li>
+    <li>La <b>feria 3D</b>: al elegir un stand, la cámara vuela hasta él y lo marca en rojo. Los reservados muestran el nombre de la empresa en el panel del fondo.</li>
+    <li>Abajo del 3D va una barra con <b>todas las zonas</b> (A a H, Patio y Micro) y sus stands, para ir a cualquiera con un clic.</li>
+    <li>Botones del 3D: 🎯 Ir al stand, 🧍 Pararme dentro, 🎤 Escenario y 🗺️ Vista general.</li>
+    <li><b>⤢ Agrandar la feria 3D 🎵</b>: pantalla grande, la feria gira, suena música y habla el locutor. Con <b>⤡ Achicar</b> se apaga.</li>
+    <li>Al lado, la <b>ficha del stand</b>: quién lo reservó, el precio, lo que ya pagó y lo que falta, la factura y el envío de la factura al socio. Si el stand está libre, desde ahí se reserva.</li>
+  </ul>
+  <div class="tip">Para que el locutor tenga acento venezolano, usa Microsoft Edge.</div>
+</div>
+
+<div class="panel">
+  <h2>Inscripciones<span class="donde">menú Expo: Inscripciones</span></h2>
+  <ul>
+    <li><b>Reservar un stand</b> paso a paso: socio → precio → abono inicial (opcional), con un resumen en vivo.</li>
+    <li>La lista de todas las reservas, con columnas <b>Ya pagó</b> y <b>Falta</b>. Se puede cambiar el precio o eliminar una reserva.</li>
+    <li>Las reservas que hace un socio desde la página web aparecen con 🌐.</li>
+  </ul>
+</div>
+
+<div class="panel">
+  <h2>Pagos<span class="donde">menú Expo: Pagos</span></h2>
+  <p class="para">Se registran los pagos de los stands (monto, fecha y banco). Solo el presidente y el gerente pueden eliminar un pago.</p>
+</div>
+
+<div class="panel">
+  <h2>Cobros<span class="donde">menú Expo: Cobros</span></h2>
+  <p class="para">Los <b>socios con saldo pendiente</b> en sus stands: se eligen y se les envía el cobro por correo, o se descargan los PDF en un ZIP. Al lado se ve <b>cómo lo recibe el socio</b>.</p>
+</div>
+
+<div class="panel">
+  <h2>Configurar<span class="donde">menú Expo: Configurar</span></h2>
+  <ul>
+    <li>Los datos generales y la <b>fecha de cada día</b> de la feria.</li>
+    <li>Los <b>precios de los stands</b> por zona (hoy $350.000 cada uno) y precios especiales por stand.</li>
+    <li><b>Agregar un stand</b> nuevo: zona, precio y empresa sugerida.</li>
+    <li><b>Exigir estar al día para reservar</b>: hoy está <b>apagado</b>, así que todos los socios pueden reservar. Los suspendidos nunca pueden.</li>
+    <li>Las etiquetas del encabezado de la Expo (✏️ Editar).</li>
+  </ul>
+</div>
+
+<div class="panel">
+  <h2>Página de reserva para los socios<span class="donde">reservar.html</span></h2>
+  <p class="para">Una página aparte, sin contraseña, para que el socio reserve solo: ingresa su RUT, elige un stand en la feria 3D y queda reservado; ASOINCO le envía la factura. La versión con 3D <b>aún no está publicada</b> (se publicará cuando se abra la venta).</p>
+</div>
+
+</body></html>

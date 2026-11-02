@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reserva tu stand · Expo ASOINCO 2027</title>
+<link rel="icon" href="icon-192.png">
+<style>
+  :root{ --navy:#16324f; --blue:#2f7fc9; --yellow:#fdc844; --green:#2e9e5b; --red:#d64545; --ink:#1d2b3a; --muted:#6b7a89; --line:#e2e8ee; --paper:#f5f8fb; --z:#2f7fc9; }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--paper); color:var(--ink);}
+  header{background:linear-gradient(120deg,var(--navy),var(--blue)); color:#fff; padding:22px 16px 26px;}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 16px;}
+  header .wrap{display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  header img{height:46px; background:#fff; border-radius:10px; padding:5px 10px;}
+  header h1{margin:0; font-size:22px;}
+  header p{margin:4px 0 0; opacity:.85; font-size:13.5px;}
+  .pasos{display:flex; gap:6px; margin:18px 0 16px; flex-wrap:wrap;}
+  .paso{flex:1; min-width:120px; background:#fff; border:1px solid var(--line); border-radius:10px; padding:8px 10px; font-size:12px; color:var(--muted); font-weight:700;}
+  .paso b{display:inline-grid; place-items:center; width:20px; height:20px; border-radius:50%; background:var(--line); color:var(--muted); margin-right:6px; font-size:11px;}
+  .paso.on{border-color:var(--blue); color:var(--navy);} .paso.on b{background:var(--blue); color:#fff;}
+  .paso.ok{color:var(--green);} .paso.ok b{background:var(--green); color:#fff;}
+  .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:20px; margin-bottom:16px;}
+  .card h2{margin:0 0 6px; font-size:18px; color:var(--navy);}
+  .hint{color:var(--muted); font-size:13px; margin:0 0 12px; line-height:1.5;}
+  input[type=text]{font:inherit; font-size:17px; padding:12px 14px; border:1.5px solid var(--line); border-radius:10px; width:100%; max-width:320px;}
+  input[type=text]:focus{outline:none; border-color:var(--blue);}
+  .btn{font:inherit; font-weight:800; font-size:15px; border:none; border-radius:10px; padding:12px 20px; cursor:pointer; background:var(--blue); color:#fff;}
+  .btn:disabled{opacity:.45; cursor:not-allowed;}
+  .btn.amarillo{background:var(--yellow); color:var(--navy);}
+  .btn.ghost{background:#fff; color:var(--navy); border:1.5px solid var(--line);}
+  .fila{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+  .saludo{display:flex; gap:12px; align-items:center; background:var(--paper); border-radius:12px; padding:12px 14px; margin-bottom:14px; border-left:6px solid var(--z);}
+  .saludo .dot{width:40px; height:40px; border-radius:50%; background:var(--z); color:#fff; display:grid; place-items:center; font-weight:900; font-size:18px; flex:none;}
+  .layout{display:grid; grid-template-columns:1.25fr 1fr; gap:16px; align-items:start;}
+  @media (max-width:820px){ .layout{grid-template-columns:1fr;} }
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(64px,1fr)); gap:8px; padding-top:8px;}
+  .st{aspect-ratio:1.1; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-weight:900; font-size:15px; cursor:pointer; border:2px dashed var(--z); background:#fff; color:var(--z); position:relative; transition:transform .15s;}
+  .st:hover{transform:translateY(-2px);}
+  .st small{font-size:9.5px; font-weight:700; opacity:.85;}
+  .st.ocup{border:2px solid #d5dbe1; background:#eef1f4; color:#a3adb8; cursor:not-allowed; transform:none;}
+  .st.sug::before{content:'★ Sugerido'; position:absolute; top:-9px; background:var(--yellow); color:var(--navy); font-size:9px; font-weight:900; padding:1px 6px; border-radius:10px;}
+  .st.sel{background:var(--z); color:#fff; border-style:solid; box-shadow:0 0 0 3px #ff2d2d;}
+  .leyenda{display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--muted); margin:10px 0 0;}
+  .feria3d iframe{display:block; width:100%; height:420px; border:1px solid var(--line); border-radius:12px; background:#e3e9ef;}
+  @media (max-width:820px){ .feria3d iframe{height:340px;} }
+  .resumen{background:var(--paper); border-radius:12px; padding:14px 16px; margin:14px 0;}
+  .resumen .l{display:flex; justify-content:space-between; gap:10px; padding:5px 0; font-size:14px; border-bottom:1px dashed var(--line);}
+  .resumen .l:last-child{border:none;}
+  .resumen .l.total{font-size:18px; font-weight:900; color:var(--navy); padding-top:9px;}
+  .pago{border:1.5px solid var(--line); border-radius:12px; padding:14px; margin-bottom:10px;}
+  .pago h3{margin:0 0 4px; font-size:15px;}
+  .tag{display:inline-block; font-size:10.5px; font-weight:800; background:#e8eef5; color:var(--muted); padding:2px 8px; border-radius:20px; margin-left:6px; vertical-align:2px;}
+  .confirma{position:relative; overflow:hidden; text-align:center; color:#fff; background:linear-gradient(135deg,var(--navy) 0%,#1f4f80 55%,var(--blue) 100%); border-radius:14px; padding:34px 24px 30px; margin:-4px -4px 6px;}
+  .confirma::before{content:''; position:absolute; right:-70px; top:-90px; width:260px; height:260px; border-radius:50%; background:radial-gradient(circle, rgba(253,200,68,.35), transparent 65%);}
+  .confirma::after{content:''; position:absolute; left:0; right:0; bottom:0; height:4px; background:linear-gradient(90deg,#8dc63f 0 33.3%,var(--yellow) 33.3% 66.6%,var(--blue) 66.6% 100%);}
+  .confirma > *{position:relative;}
+  .confirma-check{width:58px; height:58px; margin:0 auto 14px; border-radius:50%; background:rgba(255,255,255,.14); border:2px solid rgba(255,255,255,.55); display:grid; place-items:center; color:#fff;}
+  .confirma-eyebrow{font-size:11.5px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--yellow); margin-bottom:8px;}
+  .confirma h2{color:#fff; font-size:24px; margin:0 0 12px; line-height:1.25;}
+  .confirma-pill{display:inline-block; background:#fff; color:var(--navy); font-weight:800; font-size:14px; padding:6px 16px; border-radius:30px; margin-bottom:14px;}
+  .confirma-pill:empty{display:none;}
+  .confirma p{margin:0 auto; max-width:520px; font-size:14.5px; line-height:1.6; color:rgba(255,255,255,.88);}
+  .msg{border-radius:10px; padding:12px 14px; font-size:14px; margin-top:12px; line-height:1.5;}
+  .msg.err{background:#fdecec; color:#a12f2f; border:1px solid #f3c4c4;}
+  .msg.info{background:#fff7e0; color:#7a5a00; border:1px solid #f3dc9a;}
+  .msg.ok{background:#e8f6ee; color:#1f6e41; border:1px solid #bfe3cd;}
+  .campos{display:grid; grid-template-columns:1fr 1fr; gap:10px 14px;}
+  .campos label{display:flex; flex-direction:column; gap:4px; font-size:12.5px; font-weight:700; color:var(--navy);}
+  .campos label.ancho{grid-column:1/-1;}
+  .campos input{font:inherit; font-size:15px; font-weight:400; padding:10px 12px; border:1.5px solid var(--line); border-radius:10px; width:100%; max-width:none; background:#fff;}
+  .campos input:focus{outline:none; border-color:var(--blue);}
+  @media (max-width:600px){ .campos{grid-template-columns:1fr;} }
+  .inf{display:flex; justify-content:space-between; gap:10px; align-items:center; padding:8px 0; border-bottom:1px dashed var(--line); font-size:14px;}
+  .inf:last-child{border:none;}
+  .est{font-size:11.5px; font-weight:800; padding:3px 10px; border-radius:20px;}
+  .est.pendiente{background:#fff3d6; color:#8a6100;} .est.confirmado{background:#e8f6ee; color:#1f6e41;} .est.rechazado{background:#fdecec; color:#a12f2f;}
+  footer{color:var(--muted); font-size:12px; text-align:center; padding:20px 0 30px;}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <img src="logo.png" alt="ASOINCO">
+  <div><h1>Reserva tu stand · Expo ASOINCO 2027</h1><p>Exclusivo para socios de ASOINCO al día con sus cuotas</p></div>
+</div></header>
+
+<div class="wrap">
+  <div class="pasos">
+    <div class="paso on" id="p1"><b>1</b>Tu empresa</div>
+    <div class="paso" id="p2"><b>2</b>Elige tu stand</div>
+    <div class="paso" id="p3"><b>3</b>¡Reservado!</div>
+  </div>
+
+  <!-- PASO 1 -->
+  <div class="card" id="v1">
+    <h2>Ingresa el RUT de tu empresa</h2>
+    <p class="hint">Con tu RUT te mostramos la zona que corresponde a tu rubro y los stands disponibles.</p>
+    <div class="fila">
+      <input type="text" id="rut" placeholder="Ej: 76.123.456-7" autocomplete="off" onkeydown="if(event.key==='Enter') buscar()">
+      <button class="btn" id="btnBuscar" onclick="buscar()">Continuar →</button>
+    </div>
+    <div id="msg1"></div>
+  </div>
+
+  <!-- PASO 2 -->
+  <div class="card" id="v2" style="display:none;">
+    <div class="saludo" id="saludo"></div>
+    <div class="layout">
+      <div>
+        <h2>Stands disponibles en tu zona</h2>
+        <p class="hint">Toca un stand para verlo en la feria 3D. El <b>★ sugerido</b> es el que el plano de la feria tiene pensado para tu empresa, pero puedes elegir cualquier stand libre de tu zona. El precio incluye los 5 días de la feria.</p>
+        <div class="grid" id="grid"></div>
+        <div class="leyenda"><span>Borde de color = libre</span><span>Gris = ya reservado</span><span>★ = tu stand sugerido</span></div>
+      </div>
+      <div>
+        <div class="feria3d">
+          <iframe id="frame3d" title="Feria Expo ASOINCO en 3D"></iframe>
+          <p class="hint" style="margin:6px 0 0;">🏟️ Así se verá la Expo. Al elegir un stand, la cámara vuela hasta él. Puedes girar y acercarte con el mouse o con los dedos.</p>
+        </div>
+        <div id="elegido"></div>
+      </div>
+    </div>
+    <div id="msg2"></div>
+    <button class="btn ghost" style="margin-top:14px;" onclick="volverInicio()">← Cambiar RUT</button>
+  </div>
+
+  <!-- PASO 3 -->
+  <div class="card" id="v3" style="display:none;">
+    <div class="confirma">
+      <div class="confirma-check"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <div class="confirma-eyebrow" id="okEyebrow">Reserva confirmada</div>
+      <h2 id="okTit"></h2>
+      <div class="confirma-pill" id="okPill"></div>
+      <p id="okTxt"></p>
+    </div>
+    <div id="msg3"></div>
+    <div class="resumen" id="res3"></div>
+    <div id="bloquePago">
+      <div class="pago" style="border-color:var(--blue); background:#f2f7fc;">
+        <h3>🧾 ¿Cómo pago?</h3>
+        <p class="hint" style="margin:0;">Paga por <b>transferencia</b> a la cuenta de abajo y <b>adjunta aquí tu comprobante</b>. ASOINCO lo revisará y te enviará la <b>factura</b> al correo registrado de tu empresa.</p>
+      </div>
+      <div class="pago">
+        <h3>🏦 Datos para transferencia</h3>
+        <p class="hint" style="margin:0;">Banco Scotiabank · Cuenta Corriente N° 983742467<br>Asociación Gremial de Industrias de Coquimbo ASOINCO A.G. · RUT 65.674.660-2<br>Correo: finanzas.asoinco@gmail.com</p>
+      </div>
+      <div class="pago" style="border-color:var(--green);">
+        <h3>📎 Ya transferí: adjuntar comprobante</h3>
+        <p class="hint">Sube la foto o el PDF del comprobante de tu transferencia. Puedes pagar en una o varias transferencias.</p>
+        <div class="campos">
+          <label>Monto transferido<input type="text" id="cMonto" inputmode="numeric" placeholder="Ej: 850.000" oninput="formatoMonto(this)"></label>
+          <label>Fecha de la transferencia<input type="date" id="cFecha"></label>
+          <label>Banco desde el que pagaste<input type="text" id="cBanco" placeholder="Ej: Banco de Chile"></label>
+          <label>Comprobante (foto o PDF)<input type="file" id="cArchivo" accept="image/*,application/pdf"></label>
+          <label class="ancho">Comentario (opcional)<input type="text" id="cNota" placeholder="Ej: primera cuota del stand"></label>
+        </div>
+        <button class="btn" id="btnComprobante" style="background:var(--green); margin-top:12px;" onclick="enviarComprobante()">Enviar comprobante a ASOINCO</button>
+        <div id="msgPago"></div>
+      </div>
+      <div id="informados"></div>
+    </div>
+    <p class="hint" style="text-align:center; margin-top:14px;">¿Dudas? Escríbenos a finanzas.asoinco@gmail.com</p>
+  </div>
+</div>
+<footer>ASOINCO · Asociación Gremial de Industriales de Coquimbo</footer>
+
+<script>
+const SUPABASE_URL = "https://frwvtqugssmfnslennub.supabase.co";
+const SUPABASE_KEY = "sb_publishable_iZX_eS4lr-Zg1MW4ZgyJNQ_LgJvIDGT";
+const COLOR = { A:'#2e78c2', B:'#7859b8', C:'#e59c2f', D:'#1f8a84', E:'#df6048', F:'#46b2c6', G:'#4c9a62', H:'#84ab47' };
+const ERRORES = {
+  rut_invalido: 'Revisa el RUT: parece incompleto.',
+  no_socio: 'No encontramos una empresa socia con ese RUT. Revisa que esté bien escrito o escríbenos a finanzas.asoinco@gmail.com.',
+  suspendido: 'Tu empresa figura como suspendida en ASOINCO, por eso no puede reservar. Escríbenos a finanzas.asoinco@gmail.com.',
+  deuda: 'Tu empresa tiene cuotas de ASOINCO pendientes. Para reservar un stand primero debes estar al día. Escríbenos a finanzas.asoinco@gmail.com para regularizar.',
+  sin_zona: 'Tu empresa aún no tiene una zona asignada en la feria. Escríbenos a finanzas.asoinco@gmail.com y te ayudamos.',
+  ya_tiene: 'Tu empresa ya tiene un stand reservado.',
+  ocupado: 'Ese stand acaba de ser reservado por otro socio. Elige otro, por favor.',
+  otra_zona: 'Ese stand no corresponde a la zona de tu rubro.',
+  sin_precio: 'Los precios de los stands aún no están publicados. Vuelve a intentarlo en unos días.',
+  no_stand: 'Ese stand ya no está disponible.'
+};
+const HDR = { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY, "Content-Type": "application/json" };
+let rutActual = '', datos = null, elegido = null, reserva = null;
+const money = n => '$' + Number(n || 0).toLocaleString('es-CL');
+const $ = id => document.getElementById(id);
+const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const letra = z => String(z || '').replace(/^zona\s*/i, '').trim().toUpperCase();
+const fecha = iso => new Date(iso).toLocaleString('es-CL', { day:'numeric', month:'long', hour:'2-digit', minute:'2-digit' });
+const msg = (id, tipo, t) => { $(id).innerHTML = t ? `<div class="msg ${tipo}">${t}</div>` : ''; };
+
+async function rpc(nombre, body){
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${nombre}`, { method:'POST', headers: HDR, body: JSON.stringify(body) });
+  if(!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+function ir(n){
+  [1,2,3].forEach(i => { $('v'+i).style.display = i===n ? '' : 'none'; $('p'+i).className = 'paso' + (i===n ? ' on' : i<n ? ' ok' : ''); });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function volverInicio(){ elegido = null; datos = null; msg('msg2'); ir(1); }
+
+async function buscar(){
+  const rut = $('rut').value.trim();
+  msg('msg1');
+  if(rut.replace(/[^0-9kK]/g,'').length < 7){ msg('msg1', 'err', ERRORES.rut_invalido); return; }
+  $('btnBuscar').disabled = true; $('btnBuscar').textContent = 'Buscando...';
+  try{
+    const d = await rpc('expo_web_socio', { p_rut: rut });
+    if(!d.ok){ msg('msg1', 'err', ERRORES[d.error] || 'No se pudo continuar.'); return; }
+    rutActual = rut; datos = d; elegido = null;
+    document.documentElement.style.setProperty('--z', COLOR[letra(d.zona)] || '#2f7fc9');
+    if(d.reserva){ mostrarReservaExistente(d); return; }
+    $('saludo').innerHTML = `<div class="dot">${esc(letra(d.zona))}</div><div><div style="font-size:17px; font-weight:900;">¡Hola, ${esc(d.nombre)}!</div><div style="font-size:13.5px; color:var(--muted);">Tu rubro es <b style="color:var(--z);">${esc(d.rubro)}</b> · te corresponde la <b style="color:var(--z);">${esc(d.zona)}</b></div></div>`;
+    pintar(); ir(2); cargar3d();
+  }catch(e){
+    msg('msg1', 'err', 'Hubo un problema de conexión. Intenta de nuevo en un momento.');
+  }finally{
+    $('btnBuscar').disabled = false; $('btnBuscar').textContent = 'Continuar →';
+  }
+}
+
+function pintar(){
+  const libres = datos.stands.filter(s => !s.ocupado).length;
+  $('grid').innerHTML = datos.stands.map(s => {
+    const cls = ['st', s.ocupado ? 'ocup' : '', s.sugerido ? 'sug' : '', elegido && elegido.id === s.id ? 'sel' : ''].join(' ');
+    return `<div class="${cls}" ${s.ocupado ? 'title="Ya reservado"' : `onclick="elegir('${s.id}')"`}>${esc(s.codigo)}<small>${s.ocupado ? 'reservado' : (s.precio ? money(s.precio) : 'sin precio')}</small></div>`;
+  }).join('') + (libres ? '' : '<p class="hint" style="grid-column:1/-1;">Ya no quedan stands libres en tu zona. Escríbenos a finanzas.asoinco@gmail.com.</p>');
+  if(!elegido){ $('elegido').innerHTML = ''; return; }
+  $('elegido').innerHTML = `<div class="resumen">
+    <div class="l"><span>Stand elegido</span><b>N° ${esc(elegido.codigo)} · ${esc(datos.zona)}</b></div>
+    <div class="l"><span>Incluye</span><span>Los 5 días de la feria</span></div>
+    <div class="l total"><span>Total a pagar</span><span>${money(elegido.precio)}</span></div>
+    <button class="btn" id="btnReservar" style="width:100%; margin-top:12px;" onclick="reservar()" ${elegido.precio ? '' : 'disabled'}>Reservar stand ${esc(elegido.codigo)} →</button>
+    ${elegido.precio ? '' : '<p class="hint" style="margin:10px 0 0; color:#a12f2f; font-weight:700;">Este stand aún no tiene precio publicado. ASOINCO lo publicará pronto; vuelve a intentarlo más adelante o escríbenos a finanzas.asoinco@gmail.com.</p>'}
+  </div>`;
+}
+function elegir(id){ elegido = datos.stands.find(s => s.id === id); msg('msg2'); pintar(); enviar3d({ tipo:'elegir', codigo: elegido.codigo }); }
+
+// Feria en 3D (mismo expo3d.html de la app): stands ocupados de la zona como "Reservado", cámara a la zona o al stand elegido
+let listo3d = false, cola3d = [];
+function enviar3d(m){
+  const f = $('frame3d');
+  if(listo3d && f.contentWindow) f.contentWindow.postMessage(m, '*'); else cola3d.push(m);
+}
+function cargar3d(){
+  const f = $('frame3d'), estados = {};
+  datos.stands.forEach(s => { if(s.ocupado) estados[String(s.codigo).trim()] = { empresa: '' }; });
+  listo3d = false;
+  cola3d = [{ tipo:'datos', estados, demo:false }, { tipo:'zona', zona: letra(datos.zona) }];
+  f.onload = () => { listo3d = true; cola3d.splice(0).forEach(m => f.contentWindow.postMessage(m, '*')); };
+  f.src = 'expo3d.html?v=' + Date.now();
+}
+
+async function reservar(){
+  if(!elegido) return;
+  if(!confirm(`¿Reservar el stand N° ${elegido.codigo} para ${datos.nombre} por ${money(elegido.precio)}?`)) return;
+  $('btnReservar').disabled = true; $('btnReservar').textContent = 'Reservando...';
+  try{
+    const r = await rpc('expo_web_reservar', { p_rut: rutActual, p_stand: elegido.id });
+    if(!r.ok){
+      msg('msg2', 'err', ERRORES[r.error] || 'No se pudo reservar.');
+      const d = await rpc('expo_web_socio', { p_rut: rutActual });
+      if(d.ok && d.reserva){ datos = d; mostrarReservaExistente(d); return; }
+      if(d.ok){ datos = d; elegido = null; pintar(); cargar3d(); }
+      return;
+    }
+    reserva = { id: r.id, codigo: r.codigo, zona: r.zona, precio: r.precio, pagado: 0 };
+    mostrarReservado('Reserva confirmada', '¡Felicitaciones! Ya eres parte de la Expo ASOINCO 2027', `Tu stand quedó reservado a nombre de ${datos.nombre}. Gracias por sumarte a la vitrina que reúne a las empresas que mueven la región: juntos mostraremos lo mejor de la industria de Coquimbo.`);
+  }catch(e){
+    msg('msg2', 'err', 'Hubo un problema de conexión. Intenta de nuevo.');
+    pintar();
+  }
+}
+
+function resumenHtml(){
+  return `<div class="l"><span>Empresa</span><b>${esc(datos.nombre)}</b></div>
+    <div class="l"><span>Stand</span><b>N° ${esc(reserva.codigo)} · ${esc(reserva.zona)}</b></div>
+    ${reserva.pagado ? `<div class="l"><span>Ya pagado</span><span>${money(reserva.pagado)}</span></div>` : ''}
+    <div class="l total"><span>${reserva.pagado ? 'Falta pagar' : 'Total a pagar'}</span><span>${money(Math.max(0, reserva.precio - reserva.pagado))}</span></div>`;
+}
+// Pantalla final: reserva confirmada y cómo se paga (ASOINCO envía la factura)
+function mostrarReservado(etiqueta, titulo, texto, aviso){
+  const falta = Math.max(0, Number(reserva.precio) - Number(reserva.pagado || 0));
+  $('okEyebrow').textContent = etiqueta;
+  $('okTit').textContent = titulo;
+  $('okPill').textContent = `Stand N° ${reserva.codigo} · ${reserva.zona}`;
+  $('okTxt').textContent = texto;
+  $('res3').innerHTML = resumenHtml();
+  $('bloquePago').style.display = falta <= 0 ? 'none' : '';
+  msg('msg3', aviso ? 'info' : '', aviso || '');
+  $('cMonto').value = falta > 0 ? Number(falta).toLocaleString('es-CL') : '';
+  $('cFecha').value = new Date().toLocaleDateString('en-CA');
+  msg('msgPago');
+  cargarInformados();
+  ir(3);
+}
+
+// ---- Comprobante de transferencia: se sube a storage y queda como "pago informado" para que ASOINCO lo revise en la app ----
+function formatoMonto(el){ const n = el.value.replace(/[^0-9]/g, ''); el.value = n ? Number(n).toLocaleString('es-CL') : ''; }
+const ESTADO_PAGO = { pendiente:'En revisión', confirmado:'Confirmado ✓', rechazado:'Rechazado' };
+async function cargarInformados(){
+  $('informados').innerHTML = '';
+  if(!reserva || !reserva.id) return;
+  try{
+    const lista = await rpc('expo_web_pagos_informados', { p_rut: rutActual, p_inscripcion: reserva.id });
+    if(!Array.isArray(lista) || !lista.length) return;
+    $('informados').innerHTML = `<div class="pago"><h3>🗂️ Comprobantes que ya enviaste</h3>${lista.map(p =>
+      `<div class="inf"><span>${money(p.monto)}${p.fecha_pago ? ' · ' + new Date(p.fecha_pago + 'T12:00').toLocaleDateString('es-CL') : ''}</span><span class="est ${esc(p.estado)}">${ESTADO_PAGO[p.estado] || esc(p.estado)}</span></div>`).join('')}
+      <p class="hint" style="margin:8px 0 0;">Cuando ASOINCO confirme tu pago, se descontará de lo que falta pagar.</p></div>`;
+  }catch(e){ /* sin lista: no impide pagar */ }
+}
+async function enviarComprobante(){
+  const monto = Number($('cMonto').value.replace(/[^0-9]/g, ''));
+  const fecha = $('cFecha').value;
+  const file = $('cArchivo').files[0];
+  msg('msgPago');
+  if(!monto){ msg('msgPago', 'err', 'Escribe el monto que transferiste.'); return; }
+  if(!file){ msg('msgPago', 'err', 'Adjunta la foto o el PDF de tu comprobante.'); return; }
+  const esPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
+  if(!esPdf && !file.type.startsWith('image/')){ msg('msgPago', 'err', 'El comprobante debe ser una foto o un PDF.'); return; }
+  if(file.size > 10 * 1024 * 1024){ msg('msgPago', 'err', 'El archivo pesa más de 10 MB. Prueba con una foto más liviana.'); return; }
+  const btn = $('btnComprobante');
+  btn.disabled = true; btn.textContent = 'Enviando...';
+  try{
+    const safe = file.name.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9._-]+/g, '_').slice(-60);
+    const path = `expo/comprobantes/${reserva.id}/${Date.now()}_${safe}`;
+    const up = await fetch(`${SUPABASE_URL}/storage/v1/object/cuotas/${path}`, {
+      method: 'POST',
+      headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY, "Content-Type": esPdf ? 'application/pdf' : file.type },
+      body: file
+    });
+    if(!up.ok) throw new Error('subida');
+    const r = await rpc('expo_web_informar_pago', { p_rut: rutActual, p_inscripcion: reserva.id, p_monto: monto, p_fecha: fecha || null,
+      p_banco: $('cBanco').value, p_nota: $('cNota').value, p_comprobante: path });
+    if(!r.ok){
+      msg('msgPago', 'err', r.error === 'muchos' ? 'Ya tienes varios comprobantes en revisión. Espera a que ASOINCO los revise o escríbenos a finanzas.asoinco@gmail.com.' : 'No se pudo registrar tu comprobante. Escríbenos a finanzas.asoinco@gmail.com.');
+      return;
+    }
+    $('cArchivo').value = ''; $('cNota').value = ''; $('cBanco').value = '';
+    msg('msgPago', 'ok', `¡Listo! Recibimos tu comprobante por ${money(monto)}. ASOINCO lo revisará y te avisará por correo.`);
+    cargarInformados();
+  }catch(e){
+    msg('msgPago', 'err', 'Hubo un problema al subir el comprobante. Revisa tu conexión e intenta de nuevo.');
+  }finally{
+    btn.disabled = false; btn.textContent = 'Enviar comprobante a ASOINCO';
+  }
+}
+function mostrarReservaExistente(d){
+  reserva = d.reserva;
+  const falta = Math.max(0, Number(reserva.precio) - Number(reserva.pagado));
+  if(falta <= 0){
+    mostrarReservado('Stand pagado', 'Tu participación está confirmada', `Gracias, ${d.nombre}. Tu stand está pagado en su totalidad. Nos vemos en la Expo ASOINCO 2027.`);
+    return;
+  }
+  mostrarReservado('Reserva vigente', `${d.nombre}, ya eres parte de la Expo ASOINCO 2027`, 'Tu empresa ya tiene este stand reservado.', 'ASOINCO te enviará (o ya te envió) la factura al correo registrado de tu empresa.');
+}
+</script>
+</body>
+</html>
