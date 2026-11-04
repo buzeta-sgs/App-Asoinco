@@ -618,13 +618,17 @@
     <p class="hint" id="uploadHint"></p>
 
     <div style="border:1px solid var(--line); border-radius:10px; padding:12px; margin-top:12px;">
-      <strong style="font-size:14px;">Agregar meses adeudados</strong>
-      <p class="hint" style="margin:4px 0 10px;">Escribe el valor que tenía la cuota en ese año y marca los meses que debe. Si el valor cambió, agrégalos por separado. Los totales se recalculan solos.</p>
+      <strong style="font-size:14px;">Meses a incluir</strong>
+      <p class="hint" style="margin:4px 0 10px;">Elige el año, escribe el valor de la cuota y marca los meses que debe. Se crea una cuota pendiente por mes y después se pagan una a una. Si el valor cambió, crea primero los meses de un valor y luego los del otro.</p>
       <div class="form-grid">
-        <input type="number" id="deudaAnio" value="2025" min="2000" step="1" placeholder="Año">
-        <input type="number" id="deudaMonto" placeholder="Valor de la cuota en ese año ($)">
+        <input type="number" id="deudaAnio" value="2025" min="2000" step="1" placeholder="Año" oninput="resumenMesesDeudores()">
+        <input type="number" id="deudaMonto" placeholder="Valor de cada cuota ($)" oninput="resumenMesesDeudores()">
       </div>
-      <div id="deudaMeses" style="display:flex; flex-wrap:wrap; gap:6px 14px; margin:10px 0; font-size:13px;">
+      <div style="display:flex; gap:8px; margin-top:10px;">
+        <button class="btn small ghost" onclick="marcarMesesDeudores(true)">Marcar todos</button>
+        <button class="btn small ghost" onclick="marcarMesesDeudores(false)">Quitar todos</button>
+      </div>
+      <div id="deudaMeses" onchange="resumenMesesDeudores()" style="display:flex; flex-wrap:wrap; gap:6px 14px; margin:10px 0; font-size:13px;">
         <label><input type="checkbox" class="mes-deudor" value="1"> Enero</label>
         <label><input type="checkbox" class="mes-deudor" value="2"> Febrero</label>
         <label><input type="checkbox" class="mes-deudor" value="3"> Marzo</label>
@@ -638,7 +642,8 @@
         <label><input type="checkbox" class="mes-deudor" value="11"> Noviembre</label>
         <label><input type="checkbox" class="mes-deudor" value="12"> Diciembre</label>
       </div>
-      <button class="btn small" onclick="agregarMesesDeudores()">+ Agregar meses marcados</button>
+      <p id="deudaResumen" style="margin:0 0 10px; font-size:14px; font-weight:bold; color:#16324f;"></p>
+      <button class="btn" onclick="agregarMesesDeudores()">Crear cuotas</button>
       <p class="hint" id="deudaHint" style="margin:8px 0 0;"></p>
     </div>
 
@@ -4623,6 +4628,7 @@ async function selectCompany(id){
   document.getElementById('invAmount').value = c.valor_cuota || '';
   document.getElementById('deudaMonto').value = ''; // no se propone el valor actual: la cuota de ese año pudo ser distinta
   document.getElementById('deudaHint').textContent = '';
+  marcarMesesDeudores(false); // al cambiar de socio no quedan meses marcados del anterior
   renderCompanies();
   await loadInvoices();
   loadCompanyDocs();
@@ -4769,7 +4775,7 @@ async function renderInvoices(){
         <div class="invoice-right">
           ${badge}
           <span class="amount">${money(saldo)}</span>
-          ${inv.status !== 'paid' ? `<button class="btn small ghost" onclick="markPaid('${inv.id}')">Marcar pagada</button>` : (expoPuedeEliminarPagos() ? `<button class="btn small ghost" onclick="deshacerPago('${inv.id}')">↩ Deshacer pago</button>` : '')}
+          ${inv.status !== 'paid' ? `<button class="btn small ghost" onclick="markPaid('${inv.id}')">Marcar pagada</button>` : `<button class="btn small ghost" onclick="deshacerPago('${inv.id}')">↩ Deshacer pago</button>`}
           <button class="btn icon" onclick="editarMontoCuota('${inv.id}')">✎ Monto</button>
           <button class="btn icon danger" onclick="deleteInvoice('${inv.id}')">Eliminar</button>
         </div>
@@ -5055,7 +5061,7 @@ async function confirmMarkPaid(){
     body: JSON.stringify({ status: 'paid', paid_date: paidDate, paid_bank: paidBank })
   });
 
-  sendPaymentReceivedNotice(invBeforePaid, paidDate);
+  sendPaymentReceivedNotice(invBeforePaid, paidDate, paidBank);
 
   closePaidModal();
   await loadInvoices();
@@ -5065,7 +5071,6 @@ async function confirmMarkPaid(){
 
 // Corrige una cuota marcada como pagada por error: vuelve a pendiente. Los abonos registrados no se tocan.
 async function deshacerPago(id){
-  if(!expoPuedeEliminarPagos()){ alert('Solo presidente o gerente pueden deshacer pagos.'); return; }
   const inv = cuotas.find(i => i.id === id);
   if(!inv) return;
   const detalle = `${inv.invoice_number}${inv.paid_date ? ' · pagada el ' + fechaLatam(inv.paid_date) : ''}${inv.paid_bank ? ' · ' + inv.paid_bank : ''}`;
@@ -5087,20 +5092,73 @@ async function deshacerPago(id){
   if(document.getElementById('viewFacturacion').style.display !== 'none') onFacturacionCompanyChange();
 }
 
-async function sendPaymentReceivedNotice(inv, paidDate){
+// Comprobante en PDF de una cuota pagada, adjunto a la confirmación de pago
+async function generarComprobanteCuotaFile(company, inv, paidDate, paidBank){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.setFont('helvetica');
+  const NAVY = [22,50,79], GREEN = [46,158,91], GREY = [110,125,140], LIGHT = [244,247,250];
+
+  const logo = await getAsoincoLogo();
+  if(logo) doc.addImage(logo, 'JPEG', 14, 6, 42, 21);
+  doc.setFont('helvetica','bold'); doc.setFontSize(17); doc.setTextColor(...NAVY);
+  doc.text('COMPROBANTE DE PAGO', 196, 15, { align:'right' });
+  doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(...GREY);
+  doc.text('Asociación Gremial de Industriales de Coquimbo', 196, 21, { align:'right' });
+  const third = 182/3;
+  doc.setFillColor(141,198,63); doc.rect(14,29,third,1.6,'F');
+  doc.setFillColor(253,200,68); doc.rect(14+third,29,third,1.6,'F');
+  doc.setFillColor(47,127,201); doc.rect(14+third*2,29,third,1.6,'F');
+
+  doc.setFillColor(...GREEN); doc.roundedRect(14, 36, 182, 40, 4, 4, 'F');
+  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(11);
+  doc.text('PAGO RECIBIDO', 21, 48);
+  doc.setFontSize(26);
+  doc.text(money(inv.amount), 21, 62);
+  doc.setFont('helvetica','normal'); doc.setFontSize(9.5);
+  doc.text(`${inv.invoice_number} pagada en su totalidad`, 21, 70);
+
+  doc.setDrawColor(224,230,236); doc.setFillColor(...LIGHT);
+  doc.roundedRect(14, 84, 182, 52, 3, 3, 'FD');
+  const dato = (titulo, valor, x, y, ancho) => {
+    doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(...GREY);
+    doc.text(titulo, x, y);
+    doc.setFontSize(11.5); doc.setTextColor(...NAVY);
+    doc.text(doc.splitTextToSize(String(valor || '—'), ancho)[0], x, y + 7);
+  };
+  dato('SOCIO', company.name, 20, 93, 110);
+  dato('RUT', company.rut, 140, 93, 50);
+  dato('CONCEPTO', inv.invoice_number, 20, 110, 110);
+  dato('FECHA DE PAGO', fechaLatam(paidDate), 140, 110, 50);
+  dato('BANCO', paidBank, 20, 125, 110);
+  dato('EMITIDO EL', fechaLatam(new Date().toISOString().slice(0,10)), 140, 125, 50);
+
+  doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(...GREY);
+  doc.text('Agradecemos su compromiso y apoyo a ASOINCO.', 105, 150, { align:'center' });
+  doc.text('ASOINCO A.G. · RUT 65.674.660-2 · finanzas.asoinco@gmail.com · www.asoinco.cl', 105, 156, { align:'center' });
+
+  const nombre = String(inv.invoice_number).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '');
+  return new File([doc.output('blob')], `Comprobante_${nombre}.pdf`, { type: 'application/pdf' });
+}
+
+async function sendPaymentReceivedNotice(inv, paidDate, paidBank){
   if(!inv) return;
   const company = socios.find(c => c.id === inv.socio_id);
   if(!company || !company.contact_email) return;
 
   try{
     if(USAR_BREVO){
+      let adj = [];
+      try{
+        adj = await filesToAttachments([await generarComprobanteCuotaFile(company, inv, paidDate, paidBank)]);
+      }catch(e){ console.error('No se pudo generar el comprobante:', e); } // la confirmación se envía igual, sin adjunto
       const cuerpo = `<p style="margin:0 0 14px; font-size:16px;">Estimado/a <strong style="color:#16324f;">${escHtml(company.name)}</strong>,</p>
-<p style="margin:0 0 16px;">Confirmamos la recepción de su pago. ¡Muchas gracias!</p>
+<p style="margin:0 0 16px;">Confirmamos la recepción de su pago. ¡Muchas gracias!${adj.length ? ' Adjuntamos su comprobante en PDF.' : ''}</p>
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f2f7fc; border:1px solid #d6e5f4; border-radius:12px;"><tr>
 <td style="padding:16px 20px;"><div style="font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#6b8299;">Concepto</div><div style="font-size:16px; font-weight:bold; color:#16324f; margin-top:2px;">${escHtml(inv.invoice_number)}</div><div style="font-size:12px; color:#6b8299; margin-top:4px;">Pagado el ${fechaLatam(paidDate)}</div></td>
 <td style="padding:16px 20px; text-align:right; border-left:1px solid #d6e5f4;"><div style="font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#6b8299;">Monto</div><div style="font-size:22px; font-weight:bold; color:#2e9e5b; margin-top:2px;">${money(inv.amount)}</div></td></tr></table>
 <p style="margin:16px 0 0;">Agradecemos su compromiso y apoyo a ASOINCO.</p>`;
-      await enviarCorreoAsoinco({ to: company.contact_email, subject: 'Confirmación de pago - ASOINCO', bodyHtml: cuerpo });
+      await enviarCorreoAsoinco({ to: company.contact_email, subject: 'Confirmación de pago - ASOINCO', bodyHtml: cuerpo, attachments: adj });
     } else {
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_PAYMENT_TEMPLATE_ID, {
         to_email: company.contact_email,
@@ -5196,6 +5254,19 @@ async function addInvoice(){
   await loadAllInvoicesForSummary();
 }
 
+function marcarMesesDeudores(marcar){
+  document.querySelectorAll('.mes-deudor').forEach(cb => { cb.checked = marcar; });
+  resumenMesesDeudores();
+}
+
+function resumenMesesDeudores(){
+  const meses = document.querySelectorAll('.mes-deudor:checked').length;
+  const monto = Number(document.getElementById('deudaMonto').value);
+  document.getElementById('deudaResumen').textContent = meses && monto > 0
+    ? `${meses === 1 ? 'Se creará 1 cuota' : `Se crearán ${meses} cuotas`} de ${money(monto)} = ${money(meses * monto)}`
+    : '';
+}
+
 // Carga manual de meses adeudados de años anteriores: una cuota pendiente por mes, igual que la generación automática
 async function agregarMesesDeudores(){
   const hint = document.getElementById('deudaHint');
@@ -5222,8 +5293,8 @@ async function agregarMesesDeudores(){
   hint.textContent = 'Guardando...';
   const res = await fetch(`${SUPABASE_URL}/rest/v1/cuotas`, { method: 'POST', headers, body: JSON.stringify(nuevas) }).catch(() => null);
   if(!res || !res.ok){ hint.textContent = 'No se pudieron guardar los meses. Intenta de nuevo.'; return; }
-  marcados.forEach(cb => { cb.checked = false; });
-  hint.textContent = `${nuevas.length} mes(es) agregado(s).` + avisos;
+  marcarMesesDeudores(false);
+  hint.textContent = `${nuevas.length} cuota(s) creada(s).` + avisos;
   await loadInvoices();
   await loadAllInvoicesForSummary();
 }
@@ -6996,7 +7067,7 @@ async function onFacturacionCompanyChange(){
           </div>
           <div style="display:flex; align-items:center; gap:8px;">
             ${badge}
-            ${inv.status !== 'paid' ? `<button class="btn small ghost" onclick="markPaid('${inv.id}')">Marcar pagada</button>` : (expoPuedeEliminarPagos() ? `<button class="btn small ghost" onclick="deshacerPago('${inv.id}')">↩ Deshacer pago</button>` : '')}
+            ${inv.status !== 'paid' ? `<button class="btn small ghost" onclick="markPaid('${inv.id}')">Marcar pagada</button>` : `<button class="btn small ghost" onclick="deshacerPago('${inv.id}')">↩ Deshacer pago</button>`}
             <button class="btn small ghost" onclick="editarMontoCuota('${inv.id}')">✎ Editar monto</button>
           </div>
         </div>
