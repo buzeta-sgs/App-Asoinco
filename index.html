@@ -1062,12 +1062,13 @@
 const SUPABASE_URL = "https://frwvtqugssmfnslennub.supabase.co";
 const SUPABASE_KEY = "sb_publishable_iZX_eS4lr-Zg1MW4ZgyJNQ_LgJvIDGT";
 
-const EMAILJS_SERVICE_ID = "cjp24146068";
+const EMAILJS_SERVICE_ID = "service_6l3utxt";
 const EMAILJS_TEMPLATE_ID = "template_pez88fz";
 const EMAILJS_CUSTOM_TEMPLATE_ID = "template_5ows1tq";
 const EMAILJS_SUSPENSION_TEMPLATE_ID = "template_qwbxpvt";
 const EMAILJS_CARTOLA_TEMPLATE_ID = "template_m8nonrn";
 const EMAILJS_PAYMENT_TEMPLATE_ID = "template_uu9yuhc";
+const EMAILJS_COBROS_TEMPLATE_ID = "template_7l5rb3q"; // "Cobro de cuotas ASOINCO": recibe to_email, subject, message (HTML) y adjunto_1..3
 const EMAILJS_PUBLIC_KEY = "YuwEEGTX8RkIi9Vch";
 try{
   emailjs.init(EMAILJS_PUBLIC_KEY);
@@ -1848,7 +1849,7 @@ async function loadBulkPreview(){
   }
 }
 
-// Envío de correos: 'false' = EmailJS (como hasta ahora); 'true' = Brevo mediante la función enviar-correo de Supabase (correo con PDF adjunto)
+// Envío de correos: 'true' = diseño HTML con PDF adjunto (cobros por EmailJS, carta/contrato por la función enviar-correo de Supabase); 'false' = plantillas antiguas de EmailJS
 const USAR_BREVO = true;
 
 function blobToBase64(blob){
@@ -1885,7 +1886,19 @@ async function tokenVigente(){
 }
 setInterval(() => { if(window._refreshToken && Date.now() > (window._tokenVence || 0) - 5 * 60 * 1000) renovarSesion(); }, 60000);
 
+// Cobros a socios: por EmailJS con el Gmail de finanzas (plantilla "Cobro de cuotas ASOINCO"). attachments = [{ name, content(base64) }]
+async function enviarCobroEmailJS({ to, subject, html, attachments }){
+  const destino = String(to || '').split(/[;,]/).map(e => e.trim()).filter(Boolean).join(',');
+  const archivos = {};
+  (attachments || []).slice(0, 3).forEach((f, i) => {
+    const bytes = Uint8Array.from(atob(f.content), c => c.charCodeAt(0));
+    archivos['adjunto_' + (i + 1)] = new File([bytes], f.name);
+  });
+  await sendEmailJsWithAttachment(EMAILJS_COBROS_TEMPLATE_ID, { to_email: destino, subject, message: html }, archivos);
+}
+
 async function enviarCorreoBrevo(payload){
+  if(payload.remitente !== 'asistente') return enviarCobroEmailJS(payload); // solo carta/contrato siguen por Supabase
   const llamar = async () => fetch(`${SUPABASE_URL}/functions/v1/enviar-correo`, {
     method: 'POST',
     headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + ((await tokenVigente()) || SUPABASE_KEY), "Content-Type": "application/json" },
