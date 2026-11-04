@@ -5158,7 +5158,7 @@ async function sendPaymentReceivedNotice(inv, paidDate, paidBank){
 <td style="padding:16px 20px;"><div style="font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#6b8299;">Concepto</div><div style="font-size:16px; font-weight:bold; color:#16324f; margin-top:2px;">${escHtml(inv.invoice_number)}</div><div style="font-size:12px; color:#6b8299; margin-top:4px;">Pagado el ${fechaLatam(paidDate)}</div></td>
 <td style="padding:16px 20px; text-align:right; border-left:1px solid #d6e5f4;"><div style="font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#6b8299;">Monto</div><div style="font-size:22px; font-weight:bold; color:#2e9e5b; margin-top:2px;">${money(inv.amount)}</div></td></tr></table>
 <p style="margin:16px 0 0;">Agradecemos su compromiso y apoyo a ASOINCO.</p>`;
-      await enviarCorreoAsoinco({ to: company.contact_email, subject: 'Confirmación de pago - ASOINCO', bodyHtml: cuerpo, attachments: adj });
+      await enviarCorreoAsoinco({ to: `${company.contact_email},finanzas.asoinco@gmail.com`, subject: 'Confirmación de pago - ASOINCO', bodyHtml: cuerpo, attachments: adj }); // con copia a finanzas
     } else {
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_PAYMENT_TEMPLATE_ID, {
         to_email: company.contact_email,
